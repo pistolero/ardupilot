@@ -313,6 +313,8 @@ private:
  #define MOTOR_CLASS AP_MotorsOctaQuad
 #elif FRAME_CONFIG == HELI_FRAME
  #define MOTOR_CLASS AP_MotorsHeli_Single
+#elif FRAME_CONFIG == HELI_DUAL_FRAME
+ #define MOTOR_CLASS AP_MotorsHeli_Dual
 #elif FRAME_CONFIG == SINGLE_FRAME
  #define MOTOR_CLASS AP_MotorsSingle
 #elif FRAME_CONFIG == COAX_FRAME
@@ -453,7 +455,7 @@ private:
 
     // Attitude, Position and Waypoint navigation objects
     // To-Do: move inertial nav up or other navigation variables down here
-#if FRAME_CONFIG == HELI_FRAME
+#if FRAME_TYPE == HELICOPTER
     AC_AttitudeControl_Heli attitude_control;
 #else
     AC_AttitudeControl_Multi attitude_control;
@@ -504,8 +506,8 @@ private:
     AP_Rally rally;
 #endif
 
-    // RSSI 
-    AP_RSSI rssi;      
+    // RSSI
+    AP_RSSI rssi;
 
     // Crop Sprayer
 #if SPRAYER == ENABLED
@@ -538,7 +540,7 @@ private:
     // Pilot Input Management Library
     // Only used for Helicopter for AC3.3, to be expanded to include Multirotor
     // child class for AC3.4
-#if FRAME_CONFIG == HELI_FRAME
+#if FRAME_TYPE == HELICOPTER
     AC_InputManager_Heli input_manager;
 #endif
 
@@ -554,7 +556,7 @@ private:
     // setup the var_info table
     AP_Param param_loader;
 
-#if FRAME_CONFIG == HELI_FRAME
+#if FRAME_TYPE == HELICOPTER
     // Mode filter to reject RC Input glitches.  Filter size is 5, and it draws the 4th element, so it can reject 3 low glitches,
     // and 1 high glitch.  This is because any "off" glitches can be highly problematic for a helicopter running an ESC
     // governor.  Even a single "off" frame can cause the rotor to slow dramatically and take a long time to restart.
@@ -676,7 +678,7 @@ private:
     void Log_Write_Parameter_Tuning(uint8_t param, float tuning_val, int16_t control_in, int16_t tune_low, int16_t tune_high);
     void Log_Write_Home_And_Origin();
     void Log_Sensor_Health();
-#if FRAME_CONFIG == HELI_FRAME
+#if FRAME_TYPE == HELICOPTER
     void Log_Write_Heli(void);
 #endif
     void Log_Write_Precland();
